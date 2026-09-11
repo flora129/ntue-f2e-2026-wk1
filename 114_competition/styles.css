@@ -1,0 +1,134 @@
+/* 簡單響應式樣式，放在同一資料夾 */
+:root{
+  --bg:#f7f9fb;
+  --accent:#2158d8;
+  --muted:#666;
+  --card:#fff;
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans TC',Helvetica,Arial;line-height:1.6;color:#222;background:var(--bg);margin:0}
+.container{max-width:960px;margin:0 auto;padding:24px}
+.hero{background:linear-gradient(180deg, #000000 0%, #2b6be6 100%);color:#fff}
+.hero h1{margin:0 0 8px;font-size:28px}
+.subtitle{opacity:.95;margin:0 0 16px}
+
+section{background:var(--card);padding:20px;margin:18px 0;margin-left:0;border-radius:8px;box-shadow:0 1px 4px rgba(16,24,40,.06)}
+h2{margin-top:0}
+.cards article{padding:30px;width:33%;flex-direction: row;}
+.timeline li{margin:8px 0}
+.site-footer{text-align:center;color:var(--muted);font-size:14px;padding:12px;margin:18px 0}
+.small{font-size:12px;color:#888}
+
+.bgimg {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  margin:auto;
+  background-image: linear-gradient(rgba(0,0,0,0.1),rgba(0,0,0,0.1)), url("images/header.png");
+  min-height: 100vh;
+  color:#000000;
+  text-align: left;
+}
+
+.category-column {
+  display: flex;
+  align-items: center;      /* 垂直置中圖片與文字 */
+  justify-content: center;  
+  gap: 20px;               /* 圖片與文字之間的間距 */
+  margin-top: 10px;
+  flex-direction: column;
+}
+
+.category-text {
+  flex: 0.2;                  /* 文字佔滿可用空間 */
+  margin-left: 30px;       /* 圖片與文字之間留空隙 */
+}
+
+.category-image {
+  flex: 0 0 auto;           /* 圖片大小固定，不拉伸 */
+}
+
+.category-text h3,
+.category-text p {
+  margin: 0 0 10px 0;       /* 控制標題與段落間距 */
+}
+
+.category-text p {
+  line-height: 2;         /* 提高可讀性 */
+}
+.clip-circle { margin-top: 10px; width: 200px; height: 200px; object-fit: cover; clip-path: circle(50% at 50% 50%); }
+
+
+@media (max-width:600px){
+  .hero{padding:28px 0}
+  .hero h1{font-size:22px}
+  .container{padding:16px}
+}
+
+/* 簡單列印樣式 */
+@media print{
+  body{background:#fff}
+  .hero{display:none}
+  .container{padding:0}
+  section{box-shadow:none;border:0}
+}
+
+
+.nav-links {
+    display: none;
+    /* 預設隱藏，下方會用 media query 或 JS 控制 */
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    /* header 高度假設為 60px */
+    right: 0;
+    background-color: #000000;
+    width: 200px;
+}
+
+.nav-links a {
+    padding: 10px 20px;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    border-bottom: 1px solid #444;
+}
+
+.nav-links a:hover {
+    background-color: #edb86d;
+}
+
+.hamburger {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 30px;
+}
+
+.hamburger div {
+    height: 4px;
+    background-color: rgb(0, 0, 0);
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* 大螢幕時直接顯示 nav links 水平排列 */
+@media (min-width: 768px) {
+    .hamburger {
+        display: block;
+        margin-right: 14px;
+    }
+
+    .nav-links {
+        display: none;
+        position: left;
+        flex-direction: column;
+        background: none;
+        width: auto;
+        
+    }
+
+    .nav-links a {
+        border: 1px solid #666;
+        background-color: #fefcf5;
+    }
+}
