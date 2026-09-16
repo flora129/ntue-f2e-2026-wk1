@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>夏夜觀測所｜2026 日本夏日祭典與花火</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+		:root { --night: #070b1d; --blue: #9fc9ff; --mist: #dce9ff; --pink: #ff91c8; --gold: #ffd98a; --muted: #8892b4; --line: rgba(218, 230, 255, .16); }
+		* { box-sizing: border-box; }
+		html { scroll-behavior: smooth; }
+		body { margin: 0; color: var(--mist); background: var(--night); font-family: 'Space Grotesk', 'Noto Serif TC', sans-serif; overflow-x: hidden; }
+		button { font: inherit; }
+		button, a { -webkit-tap-highlight-color: transparent; }
+		.stage { position: relative; min-height: 100vh; isolation: isolate; overflow: hidden; background: linear-gradient(rgba(4, 8, 25, .72), rgba(7, 11, 29, .84)), url('../images/nagaoka-fireworks.jpg') center / cover; }
+		.stage::before { content: ''; position: absolute; z-index: -1; width: 65vw; height: 65vw; left: 38%; top: 8%; border-radius: 42% 58% 63% 37% / 45% 38% 62% 55%; background: radial-gradient(ellipse, rgba(88, 142, 255, .2), rgba(118, 59, 173, .08) 42%, transparent 70%); filter: blur(18px); animation: liquid-drift 18s ease-in-out infinite alternate; }
+		#starfield { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; }
+		.stage::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(circle at 50% 48%, rgba(25, 62, 126, .05), rgba(4, 8, 25, .64) 75%); }
+		.topbar { display: flex; align-items: center; justify-content: space-between; padding: 28px clamp(22px, 5vw, 72px); position: relative; z-index: 2; }
+		.brand { display: flex; align-items: center; gap: 13px; color: var(--mist); text-decoration: none; font-size: 15px; letter-spacing: .12em; }
+		.brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; color: var(--gold); font-family: 'Noto Serif TC', serif; font-size: 18px; }
+		.topnote { color: var(--muted); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+		.nav-links { display: flex; align-items: center; gap: 24px; margin-left: auto; margin-right: 32px; }
+		.nav-links a { color: #cbd8f2; font-size: 12px; letter-spacing: .08em; text-decoration: none; transition: color .25s; }
+		.nav-links a:hover { color: var(--gold); }
+		.hero { position: relative; display: grid; place-items: center; max-width: 1400px; min-height: calc(100vh - 96px); margin: auto; padding: 20px clamp(22px, 7vw, 110px) 110px; }
+		.hero-copy { position: relative; z-index: 1; max-width: 800px; text-align: center; }
+		.eyebrow { margin-bottom: 26px; color: var(--pink); font-size: 11px; letter-spacing: .28em; }
+		h1, h2, h3 { font-family: 'Noto Serif TC', serif; font-weight: 600; }
+		h1 { max-width: 570px; margin: 0 0 28px; font-size: clamp(44px, 7vw, 94px); line-height: 1.18; letter-spacing: .03em; }
+		h1 em { display: block; color: var(--gold); font-style: normal; }
+		.lead { max-width: 550px; margin: 0 auto 36px; color: #d0d9ed; font-size: 15px; line-height: 2; }
+		.scroll-cue { display: inline-flex; align-items: center; gap: 12px; padding: 12px 18px; border: 1px solid rgba(255, 217, 138, .55); color: #dce9ff; background: rgba(7, 11, 29, .3); cursor: pointer; font-size: 11px; letter-spacing: .2em; transition: background .25s, color .25s, transform .25s; }
+		.scroll-cue::after { content: '↓'; color: var(--gold); font-size: 16px; }
+		.scroll-cue:hover { color: #111b39; background: var(--gold); transform: translateY(3px); }
+		.visual { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+		.orb { position: absolute; top: 5%; right: 15%; width: clamp(220px, 30vw, 430px); aspect-ratio: 1; border: 1px solid rgba(183, 215, 255, .38); border-radius: 50%; background: radial-gradient(circle at 35% 28%, rgba(255,255,255,.9) 0 1%, rgba(165,205,255,.22) 2%, rgba(49,90,168,.15) 41%, transparent 69%); box-shadow: 0 0 70px rgba(120,180,255,.28), inset 0 0 45px rgba(143,204,255,.19); animation: breathe 7s ease-in-out infinite; }
+		.orb::before, .orb::after { content: ''; position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,.19); transform: rotate(-22deg); }
+		.orb::before { inset: 11%; border-left-color: transparent; border-right-color: transparent; }
+		.orb::after { inset: 22%; border-top-color: transparent; border-bottom-color: transparent; }
+		.firework { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 15px 3px var(--gold); animation: bloom 4.8s ease-out infinite; }
+		.firework::before, .firework::after { content: ''; position: absolute; inset: 50%; width: 2px; height: 110px; transform-origin: 50% 0; background: linear-gradient(var(--pink), transparent); }
+		.firework::before { transform: rotate(45deg) translateY(0); } .firework::after { transform: rotate(-45deg); }
+		.firework.a { top: 17%; right: 28%; animation-delay: .2s; } .firework.b { top: 43%; right: 4%; transform: scale(.65); animation-delay: 2.3s; background: var(--pink); } .firework.c { top: 55%; left: 5%; transform: scale(.5); animation-delay: 1.1s; }
+		.lanterns { position: absolute; right: 0; bottom: 4%; display: flex; gap: 18px; align-items: end; }
+		.lantern { position: relative; width: 58px; height: 78px; border-radius: 50% / 22%; background: linear-gradient(90deg, #b83872, #ff8eaa 48%, #af316c); box-shadow: 0 0 27px rgba(255, 113, 161, .45); animation: float 4s ease-in-out infinite; }
+		.lantern:nth-child(2) { height: 102px; background: linear-gradient(90deg, #d07034, #ffd47b 48%, #ce6238); animation-delay: 1s; } .lantern:nth-child(3) { animation-delay: 2s; }
+		.lantern::before { content: ''; position: absolute; top: -30px; left: 50%; width: 1px; height: 31px; background: #b1bfde; } .lantern::after { content: '祭'; position: absolute; inset: 0; display: grid; place-items: center; color: rgba(90, 20, 67, .65); font-family: 'Noto Serif TC', serif; font-size: 25px; }
+		@keyframes breathe { 50% { transform: scale(1.035) translateY(-7px); } } @keyframes float { 50% { transform: translateY(-14px); } } @keyframes bloom { 0%, 18% { transform: scale(.15); opacity: 0; } 34% { opacity: 1; } 62%, 100% { transform: scale(1); opacity: 0; } } @keyframes liquid-drift { 0% { transform: translate3d(-4%, -2%, 0) rotate(-8deg) scale(1); border-radius: 42% 58% 63% 37% / 45% 38% 62% 55%; } 100% { transform: translate3d(8%, 8%, 0) rotate(14deg) scale(1.16); border-radius: 63% 37% 42% 58% / 54% 62% 38% 46%; } }
+
+		.events { position: relative; padding: 105px clamp(22px, 7vw, 110px) 130px; overflow: hidden; background: radial-gradient(ellipse at 12% 14%, #182c5c 0%, transparent 38%), radial-gradient(ellipse at 86% 73%, #1e1648 0%, transparent 38%), #080d22; color: var(--mist); }
+		.events::before { content: ''; position: absolute; top: -42px; right: 0; left: 0; height: 85px; background: #080d22; clip-path: polygon(0 48%, 5% 57%, 10% 45%, 15% 56%, 20% 44%, 25% 55%, 30% 43%, 35% 56%, 40% 44%, 45% 55%, 50% 44%, 55% 56%, 60% 44%, 65% 55%, 70% 43%, 75% 56%, 80% 44%, 85% 55%, 90% 43%, 95% 56%, 100% 47%, 100% 100%, 0 100%); }
+		.events::after { content: ''; position: absolute; width: 58vw; height: 30vw; left: 45%; top: 34%; border-radius: 50%; background: linear-gradient(100deg, rgba(92, 165, 255, .1), rgba(244, 111, 205, .1), transparent 70%); filter: blur(32px); pointer-events: none; animation: flow-band 15s ease-in-out infinite alternate; }
+		@keyframes flow-band { from { transform: translate(-16%, 8%) rotate(-8deg) scale(.92); } to { transform: translate(12%, -12%) rotate(12deg) scale(1.18); } }
+		.section-inner { max-width: 1250px; margin: auto; }
+		.info-band { position: relative; overflow: hidden; padding: 88px clamp(22px, 7vw, 110px); background: #0b122c; color: var(--mist); }
+		.info-band::before { content: ''; position: absolute; width: 55vw; height: 25vw; top: 8%; right: -12%; border-radius: 50%; background: rgba(90, 128, 255, .12); filter: blur(45px); animation: flow-band 14s ease-in-out infinite alternate; }
+		.info-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 70px; align-items: start; }
+		.info-label { color: var(--pink); font-size: 11px; letter-spacing: .2em; }
+		.info-band h2 { margin: 12px 0 18px; font-size: clamp(30px, 4vw, 50px); }
+		.info-copy { max-width: 490px; color: #9eafd1; font-size: 14px; line-height: 1.9; }
+		.month-tabs { display: flex; gap: 8px; margin: 26px 0 22px; }
+		.month-tab { min-width: 60px; padding: 10px 12px; border: 1px solid var(--line); color: #a7b6d6; background: transparent; cursor: pointer; transition: .25s; }
+		.month-tab.active, .month-tab:hover { border-color: var(--gold); color: #15213f; background: var(--gold); }
+		.month-note { min-height: 66px; padding: 16px; border-left: 2px solid var(--pink); color: #d7e2f6; background: rgba(255,255,255,.04); line-height: 1.75; font-size: 13px; }
+		.stat-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+		.stat { padding: 20px; border: 1px solid var(--line); background: rgba(255,255,255,.035); }
+		.stat strong { display: block; margin-bottom: 7px; color: var(--gold); font-family: 'Noto Serif TC', serif; font-size: 29px; }
+		.stat span { color: #9eafd1; font-size: 12px; }
+		.crowd-carousel { position: relative; min-width: 0; overflow: hidden; border: 1px solid var(--line); background: #101a38; box-shadow: 0 18px 38px rgba(0,0,0,.25); }
+		.crowd-slide { display: none; position: relative; min-height: 315px; }
+		.crowd-slide.active { display: block; animation: crowd-fade .45s ease; }
+		.crowd-slide img { display: block; width: 100%; height: 315px; object-fit: cover; filter: saturate(.9) contrast(1.04); }
+		.crowd-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgba(5, 9, 27, .9) 100%); pointer-events: none; }
+		.crowd-caption { position: absolute; right: 22px; bottom: 20px; left: 22px; z-index: 1; }
+		.crowd-caption strong { display: block; margin-bottom: 6px; color: var(--gold); font-family: 'Noto Serif TC', serif; font-size: 22px; }
+		.crowd-caption span { color: #d8e3f7; font-size: 12px; line-height: 1.7; }
+		.crowd-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.45); border-radius: 50%; color: #fff; background: rgba(7,11,29,.6); cursor: pointer; transform: translateY(-50%); transition: background .2s, color .2s; }
+		.crowd-arrow:hover { color: #111b39; background: var(--gold); }
+		.crowd-arrow.prev { left: 14px; } .crowd-arrow.next { right: 14px; }
+		.crowd-dots { position: absolute; top: 18px; right: 20px; z-index: 2; display: flex; gap: 6px; }
+		.crowd-dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.45); cursor: pointer; }
+		.crowd-dot.active { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+		@keyframes crowd-fade { from { opacity: .2; transform: scale(1.02); } to { opacity: 1; transform: scale(1); } }
+		.tools { position: relative; padding: 88px clamp(22px, 7vw, 110px); background: #080d22; }
+		.tools-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 18px; }
+		.tool-panel { padding: 27px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(30,49,94,.58), rgba(12,19,49,.72)); }
+		.tool-panel h3 { margin: 9px 0 22px; font-size: 25px; }
+		.tool-panel p { color: #9eafd1; font-size: 13px; line-height: 1.8; }
+		.checklist { display: grid; gap: 12px; }
+		.check-item { display: flex; align-items: center; gap: 12px; padding: 13px; border-bottom: 1px solid var(--line); color: #cdd9ef; font-size: 13px; cursor: pointer; }
+		.check-item input { width: 17px; height: 17px; accent-color: var(--pink); }
+		.check-item:has(input:checked) { color: #7f91b7; text-decoration: line-through; }
+		.progress { height: 5px; margin-top: 18px; overflow: hidden; background: #202c4c; }
+		.progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--pink), var(--gold)); transition: width .35s ease; }
+		.progress-copy { display: flex; justify-content: space-between; margin-top: 9px; color: #8394b8; font-size: 11px; }
+		.food-panel { position: relative; overflow: hidden; }
+		.food-panel::after { content: ''; position: absolute; width: 170px; height: 170px; right: -55px; bottom: -65px; border: 1px solid rgba(255, 217, 138, .25); border-radius: 50%; box-shadow: 0 0 0 18px rgba(255, 145, 200, .06), 0 0 0 38px rgba(159, 201, 255, .04); pointer-events: none; }
+		.food-stage { position: relative; display: grid; place-items: center; min-height: 158px; margin: 5px 0 15px; border: 1px solid rgba(218, 230, 255, .13); background: radial-gradient(circle, rgba(255,217,138,.14), transparent 62%); }
+		.food-stage::before { content: ''; position: absolute; width: 105px; height: 105px; border: 1px dashed rgba(255, 217, 138, .4); border-radius: 50%; animation: food-orbit 8s linear infinite; }
+		.food-stage svg, .food-stage img { position: relative; z-index: 1; width: 128px; height: 128px; object-fit: contain; filter: drop-shadow(0 10px 14px rgba(0,0,0,.35)); animation: food-bob 3s ease-in-out infinite; }
+		.food-stage.reveal svg { animation: food-pop .65s cubic-bezier(.2,1.5,.4,1) both; }
+		.food-stage.reveal img { animation: food-pop .65s cubic-bezier(.2,1.5,.4,1) both; }
+		.food-name { min-height: 25px; color: var(--gold); font-family: 'Noto Serif TC', serif; font-size: 20px; }
+		.food-description { min-height: 42px; margin: 5px 0 0; color: #a9b5d1; font-size: 12px; line-height: 1.7; }
+		.food-button { position: relative; z-index: 1; width: 100%; margin-top: 15px; }
+		@keyframes food-orbit { to { transform: rotate(360deg); } } @keyframes food-bob { 50% { transform: translateY(-7px) rotate(2deg); } } @keyframes food-pop { 0% { opacity: 0; transform: scale(.3) rotate(-15deg); } 70% { transform: scale(1.12) rotate(4deg); } 100% { opacity: 1; transform: scale(1) rotate(0); } }
+		.timeline-section { position: relative; padding: 92px clamp(22px, 7vw, 110px); overflow: hidden; background: #0b122c; }
+		.timeline-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 44px; }
+		.timeline-head h2 { margin: 10px 0 0; font-size: clamp(30px, 4vw, 50px); }
+		.timeline-head p { max-width: 330px; margin: 0; color: #9eafd1; font-size: 13px; line-height: 1.8; }
+		.timeline { position: relative; display: grid; gap: 0; }
+		.timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: 95px; width: 1px; background: linear-gradient(var(--pink), rgba(255,255,255,.1), var(--gold)); }
+		.timeline-item { position: relative; display: grid; grid-template-columns: 75px 1fr; gap: 42px; min-height: 105px; }
+		.timeline-date { color: var(--gold); font-size: 12px; line-height: 1.3; text-align: center; }
+		.timeline-date strong { display: block; color: #fff; font-family: 'Noto Serif TC', serif; font-size: 22px; }
+		.timeline-content { position: relative; padding: 0 0 30px 28px; border-bottom: 1px solid rgba(218,230,255,.1); }
+		.timeline-content::before { content: ''; position: absolute; top: 4px; left: -6px; width: 11px; height: 11px; border: 3px solid #0b122c; border-radius: 50%; background: var(--pink); box-shadow: 0 0 0 1px var(--pink), 0 0 16px rgba(255,145,200,.65); }
+		.timeline-content h3 { margin: 0 0 7px; font-size: 20px; }
+		.timeline-content p { margin: 0; color: #9eafd1; font-size: 12px; line-height: 1.7; }
+		.timeline-tag { display: inline-block; margin-left: 8px; color: var(--pink); font-family: 'Space Grotesk', sans-serif; font-size: 10px; letter-spacing: .1em; }
+		.timeline-month { position: relative; margin-bottom: 14px; border: 1px solid var(--line); background: rgba(22, 38, 79, .3); }
+		.timeline-month summary { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; color: var(--mist); cursor: pointer; list-style: none; }
+		.timeline-month summary::-webkit-details-marker { display: none; }
+		.timeline-month summary::after { content: '+'; color: var(--gold); font-size: 24px; font-weight: 300; }
+		.timeline-month[open] summary::after { content: '−'; }
+		.timeline-month summary strong { color: var(--gold); font-family: 'Noto Serif TC', serif; font-size: 24px; }
+		.timeline-month summary span { margin-left: 10px; color: #9eafd1; font-size: 12px; }
+		.timeline-month .timeline { padding: 16px 22px 6px; }
+		.faq { position: relative; padding: 90px clamp(22px, 7vw, 110px); background: #070b1d; }
+		.faq h2 { margin: 10px 0 34px; font-size: clamp(30px, 4vw, 50px); }
+		.faq-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+		.faq details { border: 1px solid var(--line); background: rgba(22, 38, 79, .42); }
+		.faq summary { display: flex; justify-content: space-between; gap: 15px; padding: 19px 20px; color: #dce9ff; cursor: pointer; list-style: none; font-size: 14px; }
+		.faq summary::-webkit-details-marker { display: none; }
+		.faq summary::after { content: '+'; color: var(--gold); font-size: 20px; line-height: 1; }
+		.faq details[open] summary::after { content: '−'; }
+		.faq details p { margin: 0; padding: 0 20px 20px; color: #9eafd1; font-size: 13px; line-height: 1.8; }
+		.section-intro { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 44px; }
+		.section-intro .label { color: var(--pink); font-size: 11px; letter-spacing: .2em; }
+		.section-intro h2 { margin: 12px 0 0; font-size: clamp(32px, 5vw, 57px); line-height: 1.2; }
+		.section-intro p { max-width: 330px; margin: 0; color: #9ba8ca; font-size: 13px; line-height: 1.8; }
+		.filters { display: flex; gap: 9px; margin-bottom: 24px; }
+		.filter { padding: 10px 17px; border: 1px solid rgba(191, 210, 250, .22); border-radius: 99px; color: #9aa8c8; background: rgba(255,255,255,.02); cursor: pointer; font-size: 12px; transition: background .25s, border-color .25s, transform .25s; }
+		.filter.active, .filter:hover { border-color: var(--gold); color: #111b39; background: var(--gold); transform: translateY(-2px); }
+		.event-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+		.event-card { position: relative; display: flex; flex-direction: column; min-height: 385px; padding: 22px; border: 1px solid rgba(199, 218, 255, .18); background: linear-gradient(145deg, rgba(30, 49, 94, .72), rgba(12, 19, 49, .82)); box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 15px 35px rgba(0,0,0,.18); transition: transform .35s, border-color .35s, box-shadow .35s; animation: card-rise .8s both; }
+		.event-card:nth-child(2) { animation-delay: .08s; } .event-card:nth-child(3) { animation-delay: .16s; } .event-card:nth-child(4) { animation-delay: .24s; } .event-card:nth-child(5) { animation-delay: .32s; } .event-card:nth-child(6) { animation-delay: .4s; }
+		.event-card:hover { transform: translateY(-9px) rotate(-.4deg); border-color: rgba(255, 217, 138, .55); box-shadow: 0 25px 50px rgba(0,0,0,.35), 0 0 28px rgba(107, 165, 255, .1); }
+		@keyframes card-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+		.event-card.hidden { display: none; }
+		.event-art { display: grid; place-items: center; height: 142px; margin: -22px -22px 20px; overflow: hidden; background: linear-gradient(135deg, #17294e, #5574aa); }
+		.event-art svg { width: 100%; height: 100%; }
+		.event-art.photo-art { position: relative; display: block; background: #101a38; }
+		.event-art.photo-art::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(7, 11, 29, .08), rgba(7, 11, 29, .48)); }
+		.event-art.photo-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: saturate(.92) contrast(1.04); transition: transform .8s ease, filter .8s ease; }
+		.event-card:hover .event-art.photo-art img { transform: scale(1.06); filter: saturate(1.12) contrast(1.05); }
+		.event-meta { display: flex; justify-content: space-between; color: var(--pink); font-size: 11px; letter-spacing: .06em; }
+		.event-card h3 { margin: 13px 0 9px; font-size: 22px; }
+		.event-card p { margin: 0 0 18px; color: #a9b5d1; font-size: 13px; line-height: 1.7; }
+		.more { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: auto; padding-top: 16px; border-top: 1px solid rgba(218, 230, 255, .13); color: #e2ecff; background: transparent; border-right: 0; border-bottom: 0; border-left: 0; cursor: pointer; font-size: 12px; text-align: left; }
+		.more span { display: grid; place-items: center; width: 27px; height: 27px; border: 1px solid rgba(218, 230, 255, .4); border-radius: 50%; transition: background .25s, color .25s; } .more:hover span { color: #121b38; background: var(--gold); }
+
+		.closing { position: relative; overflow: hidden; padding: 110px 22px; color: #dae4ff; background: linear-gradient(rgba(4, 8, 25, .72), rgba(7, 11, 29, .84)), url('../images/hanabi.jpg') center / cover; text-align: center; }
+		.closing::before { content: ''; position: absolute; width: 55vw; height: 20vw; left: 25%; top: 35%; border-radius: 50%; background: rgba(83, 130, 255, .14); filter: blur(35px); animation: flow-band 12s ease-in-out infinite alternate-reverse; }
+		.closing p { color: #93a1c5; font-size: 13px; }
+		.closing h2 { margin: 0 0 20px; font-size: clamp(30px, 5vw, 50px); }
+		footer { padding: 25px; color: #7785aa; background: #070b1d; font-size: 11px; letter-spacing: .08em; text-align: center; }
+		.back-to-top { position: fixed; right: 24px; bottom: 24px; z-index: 8; display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgba(255, 217, 138, .65); border-radius: 50%; color: var(--gold); background: rgba(11, 18, 44, .82); box-shadow: 0 8px 24px rgba(0,0,0,.3); cursor: pointer; font-size: 20px; opacity: 0; pointer-events: none; transform: translateY(12px); transition: opacity .3s, transform .3s, background .25s, color .25s; }
+		.back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+		.back-to-top:hover { color: #111b39; background: var(--gold); }
+		.modal { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 22px; background: rgba(4, 8, 24, .72); backdrop-filter: blur(10px); }
+		.modal[hidden] { display: none; }
+		.modal-box { position: relative; width: min(520px, 100%); padding: 34px; border: 1px solid rgba(210, 226, 255, .3); background: linear-gradient(145deg, #182951, #0b122d); box-shadow: 0 25px 80px rgba(0,0,0,.58), 0 0 35px rgba(86, 143, 255, .16); animation: modal-in .35s ease-out; }
+		@keyframes modal-in { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: none; } }
+		.modal-box .close { position: absolute; top: 15px; right: 17px; width: 32px; height: 32px; border: 1px solid #7181a8; border-radius: 50%; color: #dce9ff; background: transparent; cursor: pointer; }
+		.modal-box .modal-label { color: var(--pink); font-size: 11px; letter-spacing: .2em; } .modal-box h2 { margin: 13px 0; color: #fff; font-size: 34px; } .modal-box p { color: #aebbd8; line-height: 1.9; }
+		.modal-facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 24px; } .fact { padding: 13px; border: 1px solid var(--line); color: #b8c9e8; font-size: 12px; } .fact strong { display: block; margin-top: 4px; color: var(--gold); font-size: 15px; }
+		@media (max-width: 850px) { .hero { min-height: auto; padding-top: 90px; } .visual { min-height: 390px; } .orb { right: 14%; } .event-grid { grid-template-columns: repeat(2, 1fr); } .info-grid, .tools-grid { grid-template-columns: 1fr; gap: 35px; } .faq-list { grid-template-columns: 1fr; } }
+		@media (max-width: 580px) { .topnote { display: none; } .nav-links { gap: 12px; margin-right: 0; } .nav-links a { font-size: 10px; } .hero { min-height: 690px; padding-bottom: 55px; } h1 { font-size: 49px; } .visual { min-height: 330px; } .orb { top: 7%; right: 7%; width: 250px; } .lanterns { right: 3%; bottom: 1%; transform: scale(.78); transform-origin: right bottom; } .section-intro, .timeline-head { display: block; } .section-intro p, .timeline-head p { margin-top: 20px; } .event-grid { grid-template-columns: 1fr; } .event-card { min-height: 350px; } .events { padding-top: 80px; } .month-tabs { flex-wrap: wrap; } .stat-list { grid-template-columns: 1fr 1fr; } .timeline::before { left: 66px; } .timeline-item { grid-template-columns: 48px 1fr; gap: 28px; } .timeline-date strong { font-size: 18px; } .timeline-content { padding-left: 18px; } .back-to-top { right: 16px; bottom: 16px; } }
+	</style>
+</head>
+<body>
+	<div class="stage">
+		<canvas id="starfield" aria-hidden="true"></canvas>
+		<header class="topbar"><a class="brand" href="#index.html"><span class="brand-mark">夏</span><span>夏夜觀測所</span></a><nav class="nav-links" aria-label="主要導覽"><a href="#events">活動檔案</a><a href="#timeline">年度時間軸</a><a href="#faq">常見問題</a></nav><span class="topnote">Japan · Summer 2026</span></header>
+		<main class="hero" id="top">
+			<div class="hero-copy"><div class="eyebrow">JAPAN SUMMER EVENTS / 2026</div><h1>夏の夜に<em>一緒に花火を見ようか</em></h1><p class="lead">穿過祭典的燈火，聽見太鼓從遠處傳來。這是一份為旅人準備的 2026 日本夏日活動觀測指南。</p><button class="scroll-cue" id="exploreButton" type="button">CLICK TO EXPLORE</button></div>
+			<div class="visual" aria-label="沉浸式夏夜花火插圖"><div class="orb"></div><div class="firework a"></div><div class="firework b"></div><div class="firework c"></div><div class="lanterns"><div class="lantern"></div><div class="lantern"></div><div class="lantern"></div></div></div>
+		</main>
+	</div>
+
+	<section class="events" id="events"><div class="section-inner">
+		<div class="section-intro"><div><div class="label">FIELD NOTES · 活動檔案</div><h2>今年夏天，<br>去遇見光。</h2></div><p>從京都的街道祭典，到夜空綻放的花火。收藏幾個值得放進旅程的夏夜片段。</p></div>
+		<div class="filters" role="group" aria-label="活動分類"><button class="filter active" data-filter="all">全部活動</button><button class="filter" data-filter="festival">夏日祭典</button><button class="filter" data-filter="fireworks">花火大會</button></div>
+		<div class="event-grid">
+			<article class="event-card" data-type="festival" data-title="祇園祭" data-date="7.1 — 7.31" data-place="京都・八坂神社" data-description="京都最具代表性的夏日祭典。沿著四條通散步，感受山鉾巡行、宵山夜晚與老街燈籠交織出的古都夏色。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#17294e"/><path d="M0 182h500" stroke="#dce9ff" stroke-width="3"/><path d="M114 180V70h260v110M80 70h328v-17H80zM130 52l45-36 45 36M280 52l45-36 45 36" fill="none" stroke="#ffd98a" stroke-width="5"/><circle cx="130" cy="99" r="18" fill="#e85d58"/><circle cx="370" cy="99" r="18" fill="#f5a5a5"/><path d="M126 117v38M366 117v38" stroke="#ffd98a" stroke-width="4"/></svg></div><div class="event-meta"><span>FESTIVAL</span><span>JUL</span></div><h3>祇園祭</h3><p>古都街道裡的山鉾、燈籠與宵山夜晚，京都最有氣氛的夏季儀式。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="fireworks" data-title="長岡祭大花火大會" data-date="8.2 — 8.3" data-place="新潟・信濃川河畔" data-description="在寬闊河畔仰望日本代表性的花火演出。巨大的正三尺玉與祈願和平的白色花火，會把整片夜空染成流動的光。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#15264e"/><path d="M0 186q85-35 170 0t160 0 170 0" fill="#0d1835"/><g fill="none" stroke="#ffd98a" stroke-width="3"><path d="M250 104V30M250 104l-53-53M250 104l53-53M250 104l-75 0M250 104l75 0M250 104l-53 53M250 104l53 53"/><path d="M119 103V65M119 103l-28-28M119 103l28-28M119 103l-38 0M119 103l38 0" stroke="#ff91c8"/></g><circle cx="250" cy="104" r="9" fill="#fff"/></svg></div><div class="event-meta"><span>FIREWORKS</span><span>AUG</span></div><h3>長岡祭大花火大會</h3><p>信濃川上空的壯闊花火，以和平祈願與巨型煙火留下夏夜記憶。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="festival" data-title="青森睡魔祭" data-date="8.2 — 8.7" data-place="青森市中心" data-description="巨大的睡魔燈籠在夜間街道前進，鼓聲、跳舞與熱烈的跳人一起構成東北最有能量的夏日祭典。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#273d70"/><path d="M100 181V97l50-52 50 52v84Z" fill="#e85d58" stroke="#ffd98a" stroke-width="4"/><path d="M130 103q20-25 40 0M124 132q26-20 52 0" fill="none" stroke="#fff4d4" stroke-width="6"/><circle cx="139" cy="92" r="8" fill="#fff"/><circle cx="161" cy="92" r="8" fill="#fff"/><path d="M100 180h300" stroke="#101a38" stroke-width="15"/><circle cx="300" cy="160" r="17" fill="#ffd98a"/><circle cx="350" cy="160" r="17" fill="#f5a5a5"/></svg></div><div class="event-meta"><span>FESTIVAL</span><span>AUG</span></div><h3>青森睡魔祭</h3><p>巨型睡魔燈籠與太鼓隊伍穿越青森街頭，適合感受最熱烈的祭典能量。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="fireworks" data-title="隅田川花火大會" data-date="7.25" data-place="東京・隅田川沿岸" data-description="東京夏季夜晚的經典風景。兩座會場、河岸屋台與超過萬發花火，讓城市天際線成為最好的觀眾席。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#1b2f5b"/><path d="M0 184h500v36H0z" fill="#0d1835"/><path d="M70 184V107h48v77M390 184V81h52v103M175 184V133h38v51M275 184V117h41v67" fill="#101a38"/><g fill="none" stroke="#ff91c8" stroke-width="3"><path d="M245 93V39M245 93l-43-43M245 93l43-43M245 93h-59M245 93h59M245 93l-43 43M245 93l43 43"/></g><circle cx="245" cy="93" r="7" fill="#ffd98a"/></svg></div><div class="event-meta"><span>FIREWORKS</span><span>JUL</span></div><h3>隅田川花火大會</h3><p>東京夏夜的經典風景，河岸屋台與城市天際線一起迎接萬發花火。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="festival" data-title="德島阿波舞" data-date="8.12 — 8.15" data-place="德島市中心" data-description="以『跳舞的笨蛋，看舞的笨蛋，既然都是笨蛋，不如一起跳』聞名。穿上輕便夏裝，加入街頭舞隊的節奏。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#354b7b"/><path d="M0 184h500" stroke="#ffd98a" stroke-width="4"/><g stroke="#fff4d4" stroke-width="5" fill="none"><path d="M175 184q-20-45 5-88M230 184q15-48-5-92M320 184q-15-45 8-89"/><path d="M180 100l-31-24M180 100l34-33M225 92l-32-35M225 92l32-34M325 95l-30-28M325 95l33-29"/></g><circle cx="180" cy="78" r="19" fill="#e85d58"/><circle cx="225" cy="66" r="19" fill="#ffd98a"/><circle cx="325" cy="69" r="19" fill="#f5a5a5"/></svg></div><div class="event-meta"><span>FESTIVAL</span><span>AUG</span></div><h3>德島阿波舞</h3><p>整座城市都在跳舞，街頭節奏、浴衣與夏夜笑聲組成最自由的祭典。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="fireworks" data-title="神宮外苑花火大會" data-date="8.8" data-place="東京・明治神宮外苑" data-description="在東京夜景之間欣賞夏季花火與音樂舞台。城市燈光、現場演出與夜空煙火交疊成一場都會夏夜。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#111f48"/><path d="M0 184h500" stroke="#ffd98a" stroke-width="3"/><path d="M115 184V105h48v79M355 184V78h55v106M220 184v-62h53v62" fill="#0b1531"/><g fill="none" stroke="#ffd98a" stroke-width="3"><path d="M315 76V28M315 76l-38-38M315 76l38-38M315 76h-52M315 76h52M315 76l-38 38M315 76l38 38"/></g><circle cx="315" cy="76" r="6" fill="#fff"/></svg></div><div class="event-meta"><span>FIREWORKS</span><span>AUG</span></div><h3>神宮外苑花火大會</h3><p>城市夜景中的音樂與花火，適合把東京夏日的節奏一次收進眼底。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="festival" data-title="天神祭" data-date="7.24 — 7.25" data-place="大阪・大阪天滿宮" data-description="大阪夏季最重要的祭典之一，陸渡御與船渡御讓大阪街道與大川河面都充滿鼓聲、燈火與人潮。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#17294e"/><path d="M0 170q100-22 200 0t200 0 100 0v50H0z" fill="#0b1531"/><path d="M145 145h210l-25-31H170zM185 112l65-64 65 64M250 48v-23M228 35h44" fill="none" stroke="#ffd98a" stroke-width="5"/><circle cx="105" cy="74" r="18" fill="#e85d58"/><circle cx="395" cy="92" r="14" fill="#ff91c8"/></svg></div><div class="event-meta"><span>FESTIVAL</span><span>JUL</span></div><h3>天神祭</h3><p>大阪天滿宮的船渡御與奉納花火，把城市河面變成一條流動的祭典光帶。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="festival" data-title="秋田竿燈祭" data-date="8.3 — 8.6" data-place="秋田・竿燈大通り" data-description="夜間街道上，祭人以高超技巧平衡巨大的竿燈，像把一串串星星舉到夏夜頭頂。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#243c70"/><path d="M0 182h500" stroke="#ffd98a" stroke-width="4"/><path d="M145 180V55M145 55l-35 25M145 55l35 25M145 55l-25-36M145 55l25-36M145 55l-48-3M145 55l48-3" stroke="#ffd98a" stroke-width="5"/><path d="M350 180V84M350 84l-28 20M350 84l28 20M350 84l-19-28M350 84l19-28" stroke="#ff91c8" stroke-width="5"/><g fill="#fff4d4"><circle cx="110" cy="80" r="5"/><circle cx="145" cy="19" r="5"/><circle cx="180" cy="80" r="5"/><circle cx="322" cy="104" r="5"/><circle cx="350" cy="56" r="5"/></g></svg></div><div class="event-meta"><span>FESTIVAL</span><span>AUG</span></div><h3>秋田竿燈祭</h3><p>巨大的竿燈在夜間街道搖曳，兼具技藝、光影與東北祭典的安靜力量。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="festival" data-title="高知よさこい祭" data-date="8.9 — 8.12" data-place="高知市中心" data-description="舞者手持鳴子，在高知街道跟著音樂與隊伍向前舞動。每支隊伍都有自己的服裝、編舞與節奏。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#354b7b"/><path d="M0 184h500" stroke="#ffd98a" stroke-width="4"/><g fill="none" stroke="#fff4d4" stroke-width="6"><path d="M160 184q-18-53 12-92M250 184q16-52-8-101M340 184q-15-45 8-91"/><path d="M172 103l-40-27M172 103l43-35M242 83l-37-32M242 83l39-37M348 105l-42-29M348 105l42-36"/></g><circle cx="172" cy="80" r="18" fill="#e85d58"/><circle cx="242" cy="63" r="18" fill="#ffd98a"/><circle cx="348" cy="83" r="18" fill="#f5a5a5"/></svg></div><div class="event-meta"><span>FESTIVAL</span><span>AUG</span></div><h3>高知よさこい祭</h3><p>整個高知都在跳舞，鳴子聲與隊伍服裝讓夏夜充滿奔放的節奏。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="fireworks" data-title="大曲花火大會" data-date="8.29" data-place="秋田・大仙市雄物川河畔" data-description="日本頂級花火師競演的全國花火競技大會，從白色煙火到彩色大輪，適合把整晚留給天空。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#15264e"/><path d="M0 184q85-35 170 0t160 0 170 0" fill="#0d1835"/><g fill="none" stroke="#ffd98a" stroke-width="3"><path d="M250 104V30M250 104l-53-53M250 104l53-53M250 104l-75 0M250 104l75 0M250 104l-53 53M250 104l53 53"/><path d="M112 110V68M112 110l-31-31M112 110l31-31M112 110H70M112 110h42" stroke="#ff91c8"/></g><circle cx="250" cy="104" r="9" fill="#fff"/></svg></div><div class="event-meta"><span>FIREWORKS</span><span>AUG</span></div><h3>大曲花火大會</h3><p>花火師競演的秋田夏末大景，讓不同色彩與形狀在夜空接力綻放。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="festival" data-title="仙台七夕祭" data-date="8.6 — 8.8" data-place="宮城・仙台市中心" data-description="商店街掛滿色彩繽紛的巨大七夕飾物，從紙花、短冊到和紙裝飾，整座城市像走進一條流動的夏日彩帶。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#243c70"/><path d="M0 181h500" stroke="#ffd98a" stroke-width="4"/><path d="M105 181V56M250 181V42M395 181V62" stroke="#ff91c8" stroke-width="5"/><path d="m105 56-31-20 35 3-12-32 27 27 17-28-2 35 34-6-27 21M250 42l-35-22 39 7-12-30 28 27 17-28-2 36 35-8-28 22M395 62l-30-20 34 4-12-29 27 27 17-27-2 34 32-6-26 20" fill="#f5a5a5" stroke="#ffd98a" stroke-width="3"/><circle cx="105" cy="95" r="15" fill="#e85d58"/><circle cx="250" cy="90" r="15" fill="#ffd98a"/><circle cx="395" cy="105" r="15" fill="#9fc9ff"/></svg></div><div class="event-meta"><span>FESTIVAL</span><span>AUG</span></div><h3>仙台七夕祭</h3><p>七夕飾物把仙台商店街變成繽紛的夏日長廊，適合慢慢散步欣賞細節。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="festival" data-title="博多祇園山笠" data-date="7.1 — 7.15" data-place="福岡・博多地區" data-description="博多街道上的舉山笠與追い山充滿速度感，鼓聲與隊伍在清晨穿過城市，是九州代表性的夏日祭典。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#17294e"/><path d="M0 181h500" stroke="#ffd98a" stroke-width="4"/><path d="M160 180V75h180v105M125 75h250v-18H125zM185 57l65-43 65 43M250 14v-10" fill="none" stroke="#ffd98a" stroke-width="5"/><path d="M175 101h150M175 132h150" stroke="#e85d58" stroke-width="12"/><circle cx="100" cy="93" r="17" fill="#ff91c8"/><circle cx="400" cy="112" r="13" fill="#e85d58"/></svg></div><div class="event-meta"><span>FESTIVAL</span><span>JUL</span></div><h3>博多祇園山笠</h3><p>山笠隊伍與鼓聲穿過博多街道，感受九州夏季祭典的速度與熱力。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="fireworks" data-title="諏訪湖祭湖上花火大會" data-date="8.15" data-place="長野・諏訪湖畔" data-description="湖面映照著連續綻放的花火，山谷回聲讓諏訪湖的夏夜有著特別壯闊的臨場感。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#15264e"/><path d="M0 175q100-25 200 0t200 0 100 0v45H0z" fill="#0d1835"/><g fill="none" stroke="#ffd98a" stroke-width="3"><path d="M250 105V28M250 105l-57-57M250 105l57-57M250 105h-78M250 105h78M250 105l-57 57M250 105l57 57"/><path d="M105 110V72M105 110l-30-30M105 110l30-30M105 110H65M105 110h40" stroke="#ff91c8"/></g><circle cx="250" cy="105" r="9" fill="#fff"/></svg></div><div class="event-meta"><span>FIREWORKS</span><span>AUG</span></div><h3>諏訪湖祭湖上花火大會</h3><p>山谷與湖面共同放大花火聲光，形成長野夏夜的壯觀倒影。</p><button class="more">查看活動 <span>↗</span></button></article>
+			<article class="event-card" data-type="fireworks" data-title="市川花火大會" data-date="8.2" data-place="千葉・江戶川河畔" data-description="江戶川河畔的夏夜花火，與東京近郊城市燈光一起構成開闊的觀賞風景。"><div class="event-art"><svg viewBox="0 0 500 220" aria-hidden="true"><rect width="500" height="220" fill="#1b2f5b"/><path d="M0 184h500v36H0z" fill="#0d1835"/><g fill="none" stroke="#ff91c8" stroke-width="3"><path d="M245 95V38M245 95l-45-45M245 95l45-45M245 95h-60M245 95h60M245 95l-45 45M245 95l45 45"/></g><g fill="none" stroke="#ffd98a" stroke-width="3"><path d="M115 115V77M115 115l-28-28M115 115l28-28M115 115H78M115 115h37"/></g><circle cx="245" cy="95" r="7" fill="#ffd98a"/></svg></div><div class="event-meta"><span>FIREWORKS</span><span>AUG</span></div><h3>市川花火大會</h3><p>江戶川河畔的花火與城市天際線相映，是東京近郊的夏日夜景。</p><button class="more">查看活動 <span>↗</span></button></article>
+		</div>
+	</div></section>
+	<section class="info-band" id="guide"><div class="section-inner info-grid">
+		<div><div class="info-label">SUMMER ESSENTIALS · 夏日參加指南</div><h2>參加祭典、<br>花火的三大重點。</h2><p class="info-copy">日本夏日活動人潮多、場地大，先掌握三個小提醒，就能把注意力留給燈火、音樂與夜空。</p><div class="month-tabs" role="tablist" aria-label="參加重點"><button class="month-tab active" data-month="1">人潮</button><button class="month-tab" data-month="2">交通</button><button class="month-tab" data-month="3">禮儀</button></div><div class="month-note" id="monthNote">熱門花火會場建議提早抵達，先確認觀賞區、集合點與離場路線，避免散場時和同行者走散。</div></div>
+		<div class="crowd-carousel" id="crowdCarousel" aria-label="活動人潮與交通情境圖片輪播">
+			<div class="crowd-slide active"><img src="../images/crowd-festival.jpg" alt="日本祭典街道上的密集人潮"><div class="crowd-caption"><strong>祭典人潮</strong><span>熱門祭典的街道會非常熱鬧，建議先約定集合點。</span></div></div>
+			<div class="crowd-slide"><img src="../images/crowd-fireworks.jpg" alt="日本花火大會觀賞區的人潮"><div class="crowd-caption"><strong>花火觀賞人潮</strong><span>熱門觀賞區要提早抵達，並預留入場與離場時間。</span></div></div>
+			<div class="crowd-slide"><img src="../images/crowd-transit.jpg" alt="日本車站與交叉口的密集人流"><div class="crowd-caption"><strong>散場交通壅塞</strong><span>活動結束後車站與主要道路容易擁擠，回程請多預留時間。</span></div></div>
+			<button class="crowd-arrow prev" id="crowdPrev" type="button" aria-label="上一張圖片">←</button><button class="crowd-arrow next" id="crowdNext" type="button" aria-label="下一張圖片">→</button>
+			<div class="crowd-dots" role="tablist" aria-label="圖片選擇"><button class="crowd-dot active" type="button" aria-label="第 1 張"></button><button class="crowd-dot" type="button" aria-label="第 2 張"></button><button class="crowd-dot" type="button" aria-label="第 3 張"></button></div>
+		</div>
+	</div></section>
+	<section class="tools" id="tools"><div class="section-inner tools-grid">
+		<div class="tool-panel food-panel"><div class="info-label">MATSURI FOOD DRAW · 祭典美食</div><h3>祭典美食抽抽看✦</h3><p>轉動你的夏夜運氣，看看今天會遇見哪一攤香氣四溢的祭典美食。</p><div class="food-stage" id="foodStage"><svg viewBox="0 0 140 140" aria-hidden="true"><circle cx="70" cy="70" r="42" fill="#e85d58" stroke="#ffd98a" stroke-width="4"/><path d="M44 62h52M49 77h42" stroke="#fff4d4" stroke-width="5" stroke-linecap="round"/><circle cx="57" cy="51" r="4" fill="#fff4d4"/><circle cx="82" cy="92" r="4" fill="#fff4d4"/></svg></div><div class="food-name" id="foodName">準備好抽美食了嗎？</div><p class="food-description" id="foodDescription">每次抽取都會出現一種日本祭典常見小吃。</p><button class="filter food-button" id="foodButton">シャカシャカ〜</button></div>
+		<div class="tool-panel"><div class="info-label">PACKING LIST · 出發前準備</div><h3>夏夜必備物品清單</h3><div class="checklist"><label class="check-item"><input type="checkbox"> 飲用水與小毛巾</label><label class="check-item"><input type="checkbox"> 防蚊用品與防曬</label><label class="check-item"><input type="checkbox"> 行動電源與現金</label><label class="check-item"><input type="checkbox"> 雨具與輕便坐墊</label><label class="check-item"><input type="checkbox"> 回程交通與集合資訊</label></div><div class="progress"><span id="progressBar"></span></div><div class="progress-copy"><span>準備進度</span><span id="progressText">0 / 5</span></div></div>
+	</div></section>
+	<section class="timeline-section" id="timeline"><div class="section-inner"><div class="timeline-head"><div><div class="info-label">2026 EVENT CALENDAR · 年度時間軸</div><h2>循著日期，<br>找到你的夏夜。</h2></div><p>從七月初到八月底，依活動舉辦時間排列，快速看見下一場祭典與花火。</p></div><div class="timeline">
+		<div class="timeline-item"><div class="timeline-date"><strong>7.1</strong>— 7.31</div><div class="timeline-content"><h3>祇園祭 <span class="timeline-tag">FESTIVAL · 京都</span></h3><p>古都山鉾與宵山夜晚，整個七月都能感受祭典氣氛。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>7.24</strong>— 7.25</div><div class="timeline-content"><h3>天神祭 <span class="timeline-tag">FESTIVAL · 大阪</span></h3><p>船渡御沿著大川前進，城市河面亮起祭典燈火。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>7.25</strong></div><div class="timeline-content"><h3>隅田川花火大會 <span class="timeline-tag">FIREWORKS · 東京</span></h3><p>東京夏夜的經典花火與河岸屋台。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.2</strong>— 8.3</div><div class="timeline-content"><h3>長岡祭大花火大會 <span class="timeline-tag">FIREWORKS · 新潟</span></h3><p>信濃川河畔的和平祈願與巨型花火。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.2</strong>— 8.7</div><div class="timeline-content"><h3>青森睡魔祭 <span class="timeline-tag">FESTIVAL · 青森</span></h3><p>巨大睡魔燈籠與太鼓隊伍穿越街道。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.3</strong>— 8.6</div><div class="timeline-content"><h3>秋田竿燈祭 <span class="timeline-tag">FESTIVAL · 秋田</span></h3><p>把滿載燈籠的竿燈平衡在夜空之下。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.8</strong></div><div class="timeline-content"><h3>神宮外苑花火大會 <span class="timeline-tag">FIREWORKS · 東京</span></h3><p>音樂舞台與城市夜景中的夏日花火。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.9</strong>— 8.12</div><div class="timeline-content"><h3>高知よさこい祭 <span class="timeline-tag">FESTIVAL · 高知</span></h3><p>鳴子、舞隊與街道節奏組成熱烈夏夜。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.12</strong>— 8.15</div><div class="timeline-content"><h3>德島阿波舞 <span class="timeline-tag">FESTIVAL · 德島</span></h3><p>全城一起跳舞的四日祭典。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.29</strong></div><div class="timeline-content"><h3>大曲花火大會 <span class="timeline-tag">FIREWORKS · 秋田</span></h3><p>日本頂級花火師競演的夏末大景。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.6</strong>— 8.8</div><div class="timeline-content"><h3>仙台七夕祭 <span class="timeline-tag">FESTIVAL · 宮城</span></h3><p>色彩繽紛的七夕飾物掛滿仙台商店街。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>7.1</strong>— 7.15</div><div class="timeline-content"><h3>博多祇園山笠 <span class="timeline-tag">FESTIVAL · 福岡</span></h3><p>山笠隊伍與鼓聲穿越博多街道。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.2</strong></div><div class="timeline-content"><h3>市川花火大會 <span class="timeline-tag">FIREWORKS · 千葉</span></h3><p>江戶川河畔與城市天際線相映的夏夜花火。</p></div></div>
+		<div class="timeline-item"><div class="timeline-date"><strong>8.15</strong></div><div class="timeline-content"><h3>諏訪湖祭湖上花火大會 <span class="timeline-tag">FIREWORKS · 長野</span></h3><p>湖面倒影與山谷回聲共同放大花火的臨場感。</p></div></div>
+	</div></div></section>
+	<section class="faq" id="faq"><div class="section-inner"><div class="info-label">FAQ · FIREWORKS GUIDE</div><h2>日本花火大會常見問題</h2><div class="faq-list"><details><summary>花火大會需要提早多久到？</summary><p>熱門會場建議至少提前兩至三小時抵達；若有指定席或付費觀覽席，仍要預留取票與步行時間。</p></details><details><summary>可以帶自己的坐墊或食物嗎？</summary><p>多數河岸會場可攜帶輕便坐墊與飲用水，但請先確認官方規定，並將垃圾帶走。</p></details><details><summary>浴衣適合參加所有祭典嗎？</summary><p>浴衣很適合夏季祭典與花火，但請穿舒適鞋子，因為會場常需要長時間步行與排隊。</p></details><details><summary>下雨時活動會照常舉行嗎？</summary><p>花火可能因雨勢、風速或安全因素延期或取消，出發前請查看活動官方公告。</p></details><details><summary>散場後交通會不會很擁擠？</summary><p>會。建議先查好替代車站與末班車，和同行者事先約定集合點，不要只依賴手機訊號。</p></details><details><summary>可以拍照或錄影嗎？</summary><p>一般可拍攝，但請勿使用妨礙他人的大型器材或長時間架設腳架，也要遵守現場工作人員指示。</p></details></div></div></section>
+	<section class="closing"><div class="section-inner"><h2>一瞬のきらめきを、永遠の思い出に変えて</h2><h3 style="color:#828db0;">[✧將一瞬的閃耀絢爛，化作永恆的珍貴回憶✧]</h3><p>2026 · A FIELD GUIDE FOR SUMMER NIGHTS IN JAPAN</p></div></section>
+    <footer>夏夜觀測所　｜　活動日期請於出發前至官方網站確認　｜　活動照片：Wikimedia Commons</footer>
+	<button class="back-to-top" id="backToTop" type="button" aria-label="回到頁首">↑</button>
+
+	<div class="modal" id="modal" hidden><div class="modal-box"><button class="close" id="closeModal" aria-label="關閉">×</button><div class="modal-label">EVENT NOTE / 活動筆記</div><h2 id="modalTitle"></h2><p id="modalDescription"></p><div class="modal-facts"><div class="fact">活動日期<strong id="modalDate"></strong></div><div class="fact">活動地點<strong id="modalPlace"></strong></div></div></div></div>
+	<script>
+		const canvas = document.getElementById('starfield'); const context = canvas.getContext('2d'); let stars = [];
+		function resizeCanvas() { canvas.width = window.innerWidth * devicePixelRatio; canvas.height = window.innerHeight * devicePixelRatio; context.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); stars = Array.from({ length: Math.min(150, Math.floor(window.innerWidth / 8)) }, () => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, radius: Math.random() * 1.5 + .2, alpha: Math.random() * .7 + .2, speed: Math.random() * .004 + .001 })); }
+		function drawStars(time) { context.clearRect(0, 0, innerWidth, innerHeight); stars.forEach(star => { const pulse = star.alpha + Math.sin(time * star.speed) * .18; context.beginPath(); context.fillStyle = `rgba(210, 227, 255, ${pulse})`; context.arc(star.x, star.y, star.radius, 0, Math.PI * 2); context.fill(); }); requestAnimationFrame(drawStars); }
+		resizeCanvas(); window.addEventListener('resize', resizeCanvas); requestAnimationFrame(drawStars);
+		document.getElementById('exploreButton').addEventListener('click', () => document.getElementById('events').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+		const backToTop = document.getElementById('backToTop');
+		window.addEventListener('scroll', () => backToTop.classList.toggle('visible', window.scrollY > 420), { passive: true });
+		backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+		const eventPhotos = [
+			['../images/gion-matsuri.jpg', '祇園祭山鉾與祭典街景，Wikimedia Commons'],
+			['../images/nagaoka-fireworks.jpg', '長岡祭花火，Wikimedia Commons'],
+			['../images/aomori-nebuta.jpg', '青森睡魔祭燈籠，Wikimedia Commons'],
+			['../images/sumida-fireworks.jpg', '隅田川花火大會，Wikimedia Commons'],
+			['../images/awa-odori.jpg', '德島阿波舞，Wikimedia Commons'],
+			['../images/jingu-fireworks.jpg', '神宮外苑花火，Wikimedia Commons'],
+			['../images/tenjin-matsuri.jpg', '天神祭船渡御，Wikimedia Commons'],
+			['../images/akita-kanto.jpg', '秋田竿燈祭，Wikimedia Commons'],
+			['../images/kochi-yosakoi.jpg', '高知よさこい祭，Wikimedia Commons'],
+			['../images/omagari-fireworks.jpg', '大曲花火，Wikimedia Commons'],
+			['../images/sendai-tanabata.jpg', '仙台七夕祭，Wikimedia Commons'],
+			['../images/hakata-yamakasa.jpg', '博多祇園山笠，Wikimedia Commons'],
+			['../images/suwa-fireworks.jpg', '諏訪湖祭湖上花火大會，Wikimedia Commons'],
+			['../images/ichikawa-fireworks.jpg', '市川花火大會，Wikimedia Commons']
+		];
+		document.querySelectorAll('.event-card').forEach((card, index) => {
+			const image = new Image(); image.loading = 'eager'; image.decoding = 'async'; image.alt = eventPhotos[index][1];
+			image.onload = () => { const art = card.querySelector('.event-art'); art.classList.add('photo-art'); art.replaceChildren(image); };
+			image.src = eventPhotos[index][0];
+		});
+		const eventFilters = document.querySelectorAll('.filter[data-filter]'); const eventCards = document.querySelectorAll('.event-card');
+		eventFilters.forEach(filter => filter.addEventListener('click', () => { eventFilters.forEach(item => item.classList.remove('active')); filter.classList.add('active'); const selected = filter.dataset.filter; eventCards.forEach(card => card.classList.toggle('hidden', selected !== 'all' && card.dataset.type !== selected)); }));
+		const focusNotes = { 1: '熱門花火會場建議提早抵達，先確認觀賞區、集合點與離場路線，避免散場時和同行者走散。', 2: '先下載活動地圖並查好替代車站；祭典散場時人潮集中，回程時間要比平常多預留。', 3: '不佔用他人觀賞空間、不亂丟垃圾，拍照時遵守工作人員與場地公告，就是最好的祭典禮儀。' };
+		document.querySelectorAll('.month-tab').forEach(tab => tab.addEventListener('click', () => { document.querySelectorAll('.month-tab').forEach(item => item.classList.remove('active')); tab.classList.add('active'); document.getElementById('monthNote').textContent = focusNotes[tab.dataset.month]; }));
+		const foods = [
+			['章魚燒', '外酥內軟的章魚燒，最適合邊走邊吃。', '<img src="../images/food-takoyaki.png" alt="章魚燒圖示">'],
+			['蘋果糖', '閃亮亮的蘋果糖，是祭典攤位最醒目的甜味。', '<img src="../images/food-candy.png" alt="蘋果糖圖示">'],
+			['炒麵', '鐵板上冒著香氣的祭典炒麵，配上紅薑更有夏日味。', '<img src="../images/food-fried-noodles.png" alt="炒麵圖示">'],
+			['綿菓子', '蓬鬆像雲一樣的綿菓子，拿在手上就是祭典的童年記憶。', '<img src="../images/food-cotton-candy.png" alt="綿菓子圖示">'],
+			['刨冰', '透明玻璃碗裡的彩色刨冰，是炎熱夜晚的小小降溫站。', '<img src="../images/food-shaved-ice.png" alt="刨冰圖示">']
+		];
+		const foodStage = document.getElementById('foodStage'); const foodName = document.getElementById('foodName'); const foodDescription = document.getElementById('foodDescription');
+		document.getElementById('foodButton').addEventListener('click', () => { const [name, description, image] = foods[Math.floor(Math.random() * foods.length)]; foodStage.classList.remove('reveal'); void foodStage.offsetWidth; foodStage.classList.add('reveal'); foodStage.innerHTML = image; foodName.textContent = name; foodDescription.textContent = description; });
+		const timelineOrder = ['博多祇園山笠', '祇園祭', '天神祭', '隅田川花火大會', '市川花火大會', '長岡祭大花火大會', '青森睡魔祭', '秋田竿燈祭', '仙台七夕祭', '神宮外苑花火大會', '高知よさこい祭', '德島阿波舞', '諏訪湖祭湖上花火大會', '大曲花火大會'];
+		const timeline = document.querySelector('.timeline'); timelineOrder.forEach(name => { const item = [...timeline.children].find(entry => entry.querySelector('h3').textContent.includes(name)); if (item) timeline.appendChild(item); });
+		const timelineItems = [...timeline.children]; const july = document.createElement('details'); const august = document.createElement('details'); july.className = 'timeline-month'; august.className = 'timeline-month'; july.open = true; august.open = true;
+		july.innerHTML = '<summary><strong>七月</strong><span>7.1 — 7.31 · 4 場活動</span></summary><div class="timeline"></div>'; august.innerHTML = '<summary><strong>八月</strong><span>8.1 — 8.31 · 10 場活動</span></summary><div class="timeline"></div>'; timelineItems.forEach(item => { const target = item.querySelector('.timeline-date strong').textContent.startsWith('7') ? july.querySelector('.timeline') : august.querySelector('.timeline'); target.appendChild(item); }); timeline.replaceWith(july, august);
+		const checklist = document.querySelectorAll('.check-item input'); const progressBar = document.getElementById('progressBar'); const progressText = document.getElementById('progressText');
+		checklist.forEach(item => item.addEventListener('change', () => { const completed = document.querySelectorAll('.check-item input:checked').length; progressBar.style.width = `${completed / checklist.length * 100}%`; progressText.textContent = `${completed} / ${checklist.length}`; }));
+		const crowdSlides = [...document.querySelectorAll('.crowd-slide')]; const crowdDots = [...document.querySelectorAll('.crowd-dot')]; let crowdIndex = 0;
+		function showCrowdSlide(index) { crowdIndex = (index + crowdSlides.length) % crowdSlides.length; crowdSlides.forEach((slide, itemIndex) => slide.classList.toggle('active', itemIndex === crowdIndex)); crowdDots.forEach((dot, itemIndex) => dot.classList.toggle('active', itemIndex === crowdIndex)); }
+		document.getElementById('crowdPrev').addEventListener('click', () => showCrowdSlide(crowdIndex - 1)); document.getElementById('crowdNext').addEventListener('click', () => showCrowdSlide(crowdIndex + 1)); crowdDots.forEach((dot, index) => dot.addEventListener('click', () => showCrowdSlide(index)));
+		const modal = document.getElementById('modal');
+		eventCards.forEach(card => card.querySelector('.more').addEventListener('click', () => { document.getElementById('modalTitle').textContent = card.dataset.title; document.getElementById('modalDate').textContent = card.dataset.date; document.getElementById('modalPlace').textContent = card.dataset.place; document.getElementById('modalDescription').textContent = card.dataset.description; modal.hidden = false; document.body.style.overflow = 'hidden'; }));
+		function closeModal() { modal.hidden = true; document.body.style.overflow = ''; } document.getElementById('closeModal').addEventListener('click', closeModal); modal.addEventListener('click', event => { if (event.target === modal) closeModal(); }); document.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
+	</script>
+</body>
+</html>
